@@ -3,7 +3,7 @@ BASE_PATH="linmjie"
 OUTPUT="."
 
 printOpts() {
-    echo 'Options: -o, -n <output_directory>, -p <package_path>, -v <java_version> -h'
+    echo 'Options: -o <output_directory>, -p <package_path>, -v <java_version> -h'
 }
 
 while getopts 'ho:p:v:' OPTION; do
