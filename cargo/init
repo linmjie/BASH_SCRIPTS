@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+printOpts() {
+    echo "Options: -n, -o <output_directory>, h"
+}
+
+while getopts 'hno:' OPTION; do
+    case "$OPTION" in
+        n)
+            DO="NOCOPY"
+            ;;
+        o)
+            DIR="$OPTARG"
+            mkdir -p "$OPTARG"
+            cd "$OPTARG" || exit
+            ;;
+        h)
+            printOpts
+            exit 0
+            ;;
+        *)
+            printOpts
+            exit 0
+            ;;
+    esac
+done
+
+cargo init
+cd src || exit
+rm main.rs
+cat << EOF >> main.rs
+use std::collections::HashMap;
+
+fn main() {
+    let mut map = HashMap::new();
+    map.insert("Hello", "World");
+
+    let hello = "Hello";
+    match map.get(hello) {
+        Some(val) => println!("{}, {}!", hello, val),
+        None => println!("🦀")
+    }
+}
+EOF
+
+SUGGESTION="cd ${DIR:-.} && ${EDITOR:-nano} src/main.rs"
+echo "Suggestion: $SUGGESTION"
+if [[ -z $DO ]]; then
+    echo "$SUGGESTION" | xclip -sel clip || echo "$SUGGESTION" | pbcopy
+fi

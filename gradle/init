@@ -1,13 +1,17 @@
 #!/usr/bin/env bash 
+
 BASE_PATH="linmjie"
 OUTPUT="."
 
 printOpts() {
-    echo 'Options: -o <output_directory>, -p <package_path>, -v <java_version> -h'
+    echo 'Options: -n, -o <output_directory>, -p <package_path>, -v <java_version> -h'
 }
 
-while getopts 'ho:p:v:' OPTION; do
+while getopts 'hno:p:v:' OPTION; do
     case "$OPTION" in
+        n)
+            DO="NOCOPY"
+            ;;
         o)
             OUTPUT="$OPTARG"
             ;;
@@ -31,6 +35,8 @@ done
 if [[ ! -d $OUTPUT ]]; then
     mkdir "$OUTPUT"
     cd "$OUTPUT" || exit
+else 
+    exit 1
 fi
 gradle init --type basic --project-name "${PWD##*/}" --dsl groovy --java-version "${VERSION:-21}" --comments
 
@@ -60,3 +66,9 @@ jar {
 EOF
 
 echo "Main class added"
+
+SUGGESTION="cd ${OUTPUT:-.} && ${EDITOR:-nano} $MAIN_PATH/Main.java"
+echo "Suggestion: $SUGGESTION"
+if [[ -z $DO ]]; then
+    echo "$SUGGESTION" | xclip -sel clip || echo "$SUGGESTION" | pbcopy
+fi
