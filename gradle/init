@@ -1,0 +1,62 @@
+#!/usr/bin/env bash 
+BASE_PATH="linmjie"
+OUTPUT="."
+
+printOpts() {
+    echo 'Options: -o, -n <output_directory>, -p <package_path>, -v <java_version> -h'
+}
+
+while getopts 'ho:p:v:' OPTION; do
+    case "$OPTION" in
+        o)
+            OUTPUT="$OPTARG"
+            ;;
+        p)
+            BASE_PATH="$OPTARG"
+            ;;
+        v)
+            VERSION="$OPTARG"
+            ;;
+        h)
+            printOpts
+            exit 0
+            ;;
+        *)
+            printOpts
+            exit 0
+            ;;
+    esac
+done
+
+if [[ ! -d $OUTPUT ]]; then
+    mkdir "$OUTPUT"
+    cd "$OUTPUT" || exit
+fi
+gradle init --type basic --project-name "${PWD##*/}" --dsl groovy --java-version "${VERSION:-21}" --comments
+
+echo "Basic gradle init finished"
+PACKAGE="${BASE_PATH//\//.}" #"${var//<old>/<new>}"
+MAIN_PATH="src/main/java/$BASE_PATH"
+mkdir -p "$MAIN_PATH"
+cat << EOF >> "$MAIN_PATH"/Main.java
+package $PACKAGE;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+    }
+}
+EOF
+cat << EOF >> build.gradle
+plugins {
+    id 'java'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': '$PACKAGE.Main'
+    }
+}
+EOF
+
+echo "Main class added"

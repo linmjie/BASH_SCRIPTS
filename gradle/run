@@ -1,0 +1,4 @@
+#!/usr/bin/env bash 
+GREEN=$(tput setaf 2; tput bold)
+NONE=$(tput sgr0)
+[[ -f gradlew ]] && ./gradlew build && echo -e "${GREEN}RUNNING${NONE}" && java -jar build/libs/"${PWD##*/}".jar

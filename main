@@ -1,0 +1,16 @@
+#!/usr/bin/env bash 
+
+CURRENT="$HOME/scripts"
+GOTO=$CURRENT
+
+while [[ -n "$1" ]]; do
+    if [[ -d "$GOTO/$1" ]]; then
+        GOTO+="/$1"
+    else
+        FILE=$1 #to save arg1 before shifting
+        shift
+        "$GOTO"/"$FILE" "$@"
+        exit 0
+    fi
+    shift
+done
