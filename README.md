@@ -5,7 +5,7 @@
 <!-- TOC -->
 ## Requirements
 - Bash interpreter(obviously)
-- Fortune and cowsay to use the fortune teller
+- Fortune, cowsay, and python interpreter to use the fortune teller
 - Rust/Cargo to utilize cargo
 - Gradle (ideally 8.14+) and Java (ideally Java 21+) to utilize gradle tools
 
