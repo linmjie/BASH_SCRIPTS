@@ -1,0 +1,12 @@
+# HashMap
+# Place in your /usr/share/cowsay/cows directory (or whatever directory cowsay -l outputs)
+$the_cow = <<EOC;
+   $thoughts
+    $thoughts
+          _,--',###_._.--._____
+   .--.--';_'#######_      _.,-'
+  .'--'.  _.#######-;_ .-.>.'
+        '-:_######## / `' '=.
+          ) >######_/,     /~)
+          |/  ####         `^ .'
+EOC

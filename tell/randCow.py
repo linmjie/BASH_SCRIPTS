@@ -1,7 +1,13 @@
 #cowsay
 import random
+import sys
 
-input() #Header line
+#Cow files in /usr/share/cowsay/cows: apt bud-frogs bunny
+#                                   ^
+#                                   |
+#Everything left of this is not needed, now a valid cow
+cows = input().split(':')[1].split()
 
-cows = input().split()
-print(random.choice(cows))
+cow = random.choice(cows)
+print(cow)
+#sys.stderr.write(cow + '\n')

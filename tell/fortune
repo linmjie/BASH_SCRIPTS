@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 SCRIPT_PATH="$(dirname "${BASH_SOURCE}")"
-FLAGS='la'
+FLAGS='a'
 BLUE=$(tput setaf 4; tput bold)
 RESET_COLOR=$(tput sgr0)
 DELAY=2
@@ -22,9 +22,12 @@ deinitTerminal() {
 }
 
 fortuneTell() {
+    local COWS
+    COWS=$(cowsay -l)
     FORTUNE=$(fortune -$FLAGS)
 
-    COW=$(cowsay -l | python3 "$SCRIPT_PATH"/randCow.py)
+    #We actually want globbing to combine everything into one line
+    COW=$(echo $COWS | python3 "$SCRIPT_PATH"/randCow.py)
     cowsay -f "$COW" "$FORTUNE" 
 }
 
