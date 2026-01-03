@@ -38,7 +38,7 @@ if [[ ! -d $OUTPUT ]]; then
 else 
     exit 1
 fi
-gradle init --type basic --project-name "${PWD##*/}" --dsl groovy --java-version "${VERSION:-21}" --comments
+gradle init --type basic --project-name "${PWD##*/}" --dsl groovy --java-version "${VERSION:-25}" --comments
 
 echo "Basic gradle init finished"
 PACKAGE="${BASE_PATH//\//.}" #"${var//<old>/<new>}"

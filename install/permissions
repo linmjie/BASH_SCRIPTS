@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+SCRIPT_PATH="$(dirname "${BASH_SOURCE}")"
+SCRIPT_HOME="${SCRIPT_PATH%/*}"
+
+cd "$SCRIPT_HOME" || exit
+
+find "$SCRIPT_HOME" -type f ! -name "*.*" -exec chmod u+x {} +   

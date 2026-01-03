@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+PACK_MANAGER="$1"
+PACKAGES=(neovim rust cowsay fortune starship)
+
+for package in "${PACKAGES[@]}"; do
+    eval "$PACK_MANAGER install $package" || echo "$package could not be installed"
+done
+
+curl -s "https://get.sdkman.io" | bash
+
+sdk install java 25.0.1-tem
+sdk install gradle 9.2.1
+
+#alias factory 
+cd "$HOME" || exit
+
+SOURCES=(.bashrc .zhsrc)
+for source in "${SOURCES[@]}"; do
+    cat <<- EOF >> "$source"
+eval "$(starship init zsh)"
+alias lin="~/scripts/main"
+alias vim="nvim"
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+EOF
+done
+
+config factory
+cd .config || mkdir .config && cd .config || exit
+git clone https://github.com/linmjie/NeoVim-Config.git nvim
+git clone https://github.com/linmjie/starship.git starship
