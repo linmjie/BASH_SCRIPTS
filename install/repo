@@ -3,4 +3,8 @@
 REPO_NAME="$1"
 OPT_DEST="$2"
 
-git clone https://github.com/linmije/"$REPO_NAME".git "$OPT_DEST"
+if [[ -z "$OPT_DEST" ]]; then 
+    git clone https://github.com/linmjie/"$REPO_NAME".git
+else
+    git clone https://github.com/linmjie/"$REPO_NAME".git "$OPT_DEST"
+fi
