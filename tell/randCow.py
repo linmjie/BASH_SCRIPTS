@@ -6,7 +6,13 @@ import sys
 #                                   ^
 #                                   |
 #Everything left of this is not needed, now a valid cow
-cows = input().split(':')[1].split()
+#Apparently this left side doesn't generate in the subshell... sometimes
+optCows = input().split(':')
+cows = optCows
+try:
+    cows = optCows[1].split()
+except: 
+    cows = optCows[0].split()
 
 cow = random.choice(cows)
 print(cow)

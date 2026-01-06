@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
 SCRIPT_PATH="$(dirname "${BASH_SOURCE}")"
-FLAGS='a'
+FLAGS=''
 BLUE=$(tput setaf 4; tput bold)
 RESET_COLOR=$(tput sgr0)
 DELAY=2
 
+#patched together code because sometimes COLUMNS and LINES are not set
+
 initTerminal() {
 	printf '\n' # ensure we have space for the scrollbar
 	  printf '\e7' # save the cursor location
-	    printf '\e[%d;%dr' 0 "$((LINES - 1))" # set the scrollable region (margin)
+      printf '\e[%d;%dr' 0 "$((${LINES:-$(tput lines)} - 1))" # set the scrollable region (margin)
 	  printf '\e8' # restore the cursor location
 	printf '\e[1A' # move cursor up
 }
 
 deinitTerminal() {
 	printf '\e7' # save the cursor location
-	  printf '\e[%d;%dr' 0 "$LINES" # reset the scrollable region (margin)
-	  printf '\e[%d;%dH' "$LINES" 0 # move cursor to the bottom line
+    printf '\e[%d;%dr' 0 "${LINES:-$(tput lines)}" # reset the scrollable region (margin)
+    printf '\e[%d;%dH' "${LINES:-$(tput lines)}" 0 # move cursor to the bottom line
 	  printf '\e[0K' # clear the line
 	printf '\e8' # reset the cursor location
 }
@@ -24,7 +26,7 @@ deinitTerminal() {
 fortuneTell() {
     local COWS
     COWS=$(cowsay -l)
-    FORTUNE=$(fortune -$FLAGS)
+    FORTUNE=$(fortune "$FLAGS")
 
     #We actually want globbing to combine everything into one line
     COW=$(echo $COWS | python3 "$SCRIPT_PATH"/randCow.py)
@@ -35,7 +37,7 @@ printDivisors(){
     #make 3 divisor bars
     for j in $(seq 1 3); do
         #bunch of blue '=' signs for the divisors
-        for k in $(seq 0 $TOPRINT); do 
+        for k in $(seq 0 "$TOPRINT"); do 
             echo -en "${BLUE}=${RESET_COLOR}"
         done
         printf '\n'
@@ -44,13 +46,18 @@ printDivisors(){
 
 [[ -z $1 ]] && fortuneTell && exit 0
 
-for ((i = 0; i < $1; i++)); do
+for ((i = 1; i < $1; i++)); do
+
+    if [[ -z $COLUMNS ]]; then
+        COLUMNS=$(tput cols)
+    fi
 
     #normalize length of divisor bars to <= 79
     TOPRINT=$((COLUMNS-1))
     if [[ $COLUMNS -gt 80 ]]; then
         TOPRINT=79
     fi
+
     
     printDivisors
     fortuneTell
@@ -59,10 +66,10 @@ for ((i = 0; i < $1; i++)); do
     trap deinitTerminal exit
     initTerminal
 
-    SCROLL_BAR=$(python3 "$SCRIPT_PATH"/scrollBar.py "$COLUMNS" "$i" "$1")
+    SCROLL_BAR=$(python3 "$SCRIPT_PATH"/scrollBar.py "${COLUMNS:-$(tput cols)}" "$i" "$1")
 
     printf '\e7' # save the cursor location
-	  printf '\e[%d;%dH' "$LINES" 0 # move cursor to the bottom line
+    printf '\e[%d;%dH' "${LINES:-$(tput lines)}" 0 # move cursor to the bottom line
 	  printf '\e[0K' # clear the line
 	  printf '%s' "$SCROLL_BAR" # print the progress bar
 	printf '\e8' # restore the cursor location
