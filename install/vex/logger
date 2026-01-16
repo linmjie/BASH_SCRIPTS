@@ -9,7 +9,6 @@ subshell() {
 }
 
 (subshell)
-pwd
 
 cd src || exit 1
 cp ~/linlib/VexcodeLogger/src/logger.h .
