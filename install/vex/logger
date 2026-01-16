@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+subshell() {
+    [[ -d ~/linlib ]] || (cd ~ && mkdir linlib)
+    cd ~/linlib || exit 1
+    if [[ ! -d "VexcodeLogger" ]]; then
+        git clone https://github.com/linmjie/VexcodeLogger.git
+    fi
+}
+
+(subshell)
+pwd
+
+cd src || exit 1
+cp ~/linlib/VexcodeLogger/src/logger.h .
+cp ~/linlib/VexcodeLogger/src/logger.cpp .

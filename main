@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-CURRENT="$HOME/scripts"
+CURRENT="$(dirname "${BASH_SOURCE}")"
 GOTO=$CURRENT
 
 while [[ -n "$1" ]]; do

@@ -18,13 +18,13 @@ SOURCES=(.bashrc .zhsrc)
 for source in "${SOURCES[@]}"; do
     cat <<- EOF >> "$source"
 eval "$(starship init zsh)"
-alias lin="~/scripts/main"
+alias lin="~/linlib/scripts/main"
 alias vim="nvim"
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 EOF
 done
 
-config factory
+#config factory
 cd .config || mkdir .config && cd .config || exit
 git clone https://github.com/linmjie/NeoVim-Config.git nvim
 git clone https://github.com/linmjie/starship.git starship

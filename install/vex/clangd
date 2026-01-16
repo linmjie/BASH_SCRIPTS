@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+HEADER_TO_FIND="v5.h"
+VSCODE_CONFIG=$(find ~ -type d -name Code)
+
+V5_HEADER=$(find "$VSCODE_CONFIG" -type f -name "$HEADER_TO_FIND")
+V5_HEADER_DIR=$(dirname "$V5_HEADER")
+
+cat << EOF >> .clangd
+CompileFlags:
+  Add:
+    - -I../include
+    - -I$V5_HEADER_DIR
+EOF
